@@ -25,6 +25,18 @@
       min-height: 100vh;
     }
 
+    /* subtle grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 150px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
     header {
       position: relative;
       z-index: 1;
@@ -81,6 +93,7 @@
       margin-bottom: 48px;
     }
 
+    /* ─── GALLERY GRID ─── */
     .gallery {
       columns: 3;
       column-gap: 3px;
@@ -106,7 +119,6 @@
     }
 
     .gallery-item img.loaded { opacity: 1; }
-
     .gallery-item:hover img { transform: scale(1.04); }
 
     .gallery-item .overlay {
@@ -131,36 +143,35 @@
 
     /* ─── FOOTER ─── */
     footer {
-      padding: 40px;
+      position: relative;
+      z-index: 1;
       border-top: 1px solid var(--border);
+      padding: 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      position: relative;
-      z-index: 1;
     }
 
     .footer-info p {
       font-size: 11px;
-      letter-spacing: 2px;
+      letter-spacing: 0.15em;
       color: var(--muted);
       text-transform: uppercase;
       margin-bottom: 4px;
     }
 
-    .footer-socials { display: flex; gap: 20px; }
+    .footer-socials { display: flex; gap: 24px; }
     
     .footer-socials a {
       color: var(--muted);
       font-size: 20px;
-      transition: 0.3s;
+      transition: color 0.3s, transform 0.3s;
       text-decoration: none;
     }
 
-    .footer-socials a:hover { color: var(--accent); }
-
-    @media (max-width: 600px) {
-      footer { flex-direction: column; text-align: center; gap: 20px; }
+    .footer-socials a:hover {
+      color: var(--accent);
+      transform: translateY(-3px);
     }
 
     /* ─── LIGHTBOX ─── */
@@ -193,15 +204,27 @@
       cursor: pointer;
       background: none;
       border: none;
+      z-index: 101;
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .gallery-item { animation: fadeUp 0.4s ease both; }
+
+    @media (max-width: 600px) {
+      header { padding: 24px 20px; }
+      main { padding: 32px 20px; }
+      footer { flex-direction: column; gap: 20px; text-align: center; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <a class="back" href="../index.html">
-    <span>←</span> All Collections
-  </a>
+  <a class="back" href="../index.html">← All Collections</a>
   <a class="logo" href="../index.html">Caversen<span>.</span>Print</a>
 </header>
 
@@ -210,17 +233,13 @@
   <p class="page-meta">Caversen Print — Collection</p>
 
   <div class="gallery" id="gallery">
-    <div class="gallery-item" onclick="openLightbox(this)">
-      <img src="https://placehold.co/600x800/111111/c8a97e?text=Anime+01" alt="Anime Print 01" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
-      <div class="overlay"><span class="overlay-text">Anime Print 01</span></div>
     </div>
-  </div>
 </main>
 
 <footer>
   <div class="footer-info">
-    <p>© 2025 CAVERSEN PRINT</p>
-    <p>MOROCCO — FREE SHIPPING NATIONWIDE</p>
+    <p>© 2025 Caversen Print</p>
+    <p>Morocco — Free Shipping Nationwide</p>
   </div>
   <div class="footer-socials">
     <a href="https://www.instagram.com/caversen.maroc/" target="_blank"><i class="fab fa-instagram"></i></a>
@@ -237,7 +256,6 @@
   function openLightbox(item) {
     const img = item.querySelector('img');
     document.getElementById('lightbox-img').src = img.src;
-    document.getElementById('lightbox-img').alt = img.alt;
     document.getElementById('lightbox').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
