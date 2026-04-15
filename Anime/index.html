@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <!-- ✏️ Change the title per category -->
-  <title>anime — caversen</title>
+  <title>Anime — Caversen Print</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -23,17 +23,6 @@
       color: var(--text);
       font-family: 'DM Sans', sans-serif;
       min-height: 100vh;
-    }
-
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
-      background-size: 150px;
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.5;
     }
 
     header {
@@ -58,7 +47,6 @@
       transition: color 0.2s;
     }
     .back:hover { color: var(--text); }
-    .back-arrow { font-size: 16px; }
 
     .logo {
       font-family: 'Bebas Neue', sans-serif;
@@ -93,7 +81,6 @@
       margin-bottom: 48px;
     }
 
-    /* ─── GALLERY GRID ─── */
     .gallery {
       columns: 3;
       column-gap: 3px;
@@ -120,9 +107,7 @@
 
     .gallery-item img.loaded { opacity: 1; }
 
-    .gallery-item:hover img {
-      transform: scale(1.04);
-    }
+    .gallery-item:hover img { transform: scale(1.04); }
 
     .gallery-item .overlay {
       position: absolute;
@@ -135,15 +120,47 @@
       padding: 16px;
     }
 
-    .gallery-item:hover .overlay {
-      opacity: 1;
-    }
+    .gallery-item:hover .overlay { opacity: 1; }
 
     .overlay-text {
       font-size: 11px;
       letter-spacing: 0.15em;
       text-transform: uppercase;
       color: var(--text);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 40px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-info p {
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .footer-socials { display: flex; gap: 20px; }
+    
+    .footer-socials a {
+      color: var(--muted);
+      font-size: 20px;
+      transition: 0.3s;
+      text-decoration: none;
+    }
+
+    .footer-socials a:hover { color: var(--accent); }
+
+    @media (max-width: 600px) {
+      footer { flex-direction: column; text-align: center; gap: 20px; }
     }
 
     /* ─── LIGHTBOX ─── */
@@ -165,7 +182,6 @@
       max-width: 90vw;
       max-height: 90vh;
       object-fit: contain;
-      box-shadow: 0 0 80px rgba(0,0,0,0.8);
     }
 
     .lightbox-close {
@@ -175,26 +191,8 @@
       font-size: 32px;
       color: var(--muted);
       cursor: pointer;
-      transition: color 0.2s;
-      z-index: 101;
       background: none;
       border: none;
-    }
-    .lightbox-close:hover { color: var(--text); }
-
-    /* stagger */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    .gallery-item {
-      animation: fadeUp 0.4s ease both;
-    }
-
-    @media (max-width: 600px) {
-      header { padding: 24px 20px; }
-      main { padding: 32px 20px; }
     }
   </style>
 </head>
@@ -202,60 +200,34 @@
 
 <header>
   <a class="back" href="../index.html">
-    <span class="back-arrow">←</span> All Collections
+    <span>←</span> All Collections
   </a>
   <a class="logo" href="../index.html">Caversen<span>.</span>Print</a>
 </header>
 
 <main>
-  <!-- ✏️ Change this title per category -->
-  <h1 class="page-title"></h1>
-  <p class="page-meta">Caversen — Collection</p>
+  <h1 class="page-title">Anime</h1>
+  <p class="page-meta">Caversen Print — Collection</p>
 
   <div class="gallery" id="gallery">
-    <!--
-      ✏️ HOW TO ADD IMAGES:
-      1. Upload your images to the matching folder on GitHub (e.g. //)
-      2. Copy this block for each image and update the src path.
-      3. The alt text will show on hover.
-
-      Example:
-      <div class="gallery-item" onclick="openLightbox(this)">
-        <img src="your-image-name.jpg" alt="Print Title" loading="lazy" onload="this.classList.add('loaded')"/>
-        <div class="overlay"><span class="overlay-text">Print Title</span></div>
-      </div>
-    -->
-
-    <!-- PLACEHOLDER ITEMS — delete these once you add real images -->
     <div class="gallery-item" onclick="openLightbox(this)">
-      <img src="https://placehold.co/600x800/111111/c8a97e?text=+01" alt=" Print 01" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
-      <div class="overlay"><span class="overlay-text"> Print 01</span></div>
+      <img src="https://placehold.co/600x800/111111/c8a97e?text=Anime+01" alt="Anime Print 01" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
+      <div class="overlay"><span class="overlay-text">Anime Print 01</span></div>
     </div>
-    <div class="gallery-item" onclick="openLightbox(this)">
-      <img src="https://placehold.co/600x600/111111/c8a97e?text=+02" alt=" Print 02" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
-      <div class="overlay"><span class="overlay-text"> Print 02</span></div>
-    </div>
-    <div class="gallery-item" onclick="openLightbox(this)">
-      <img src="https://placehold.co/600x900/111111/c8a97e?text=Anime+03" alt="Anime Print 03" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
-      <div class="overlay"><span class="overlay-text">Anime Print 03</span></div>
-    </div>
-    <div class="gallery-item" onclick="openLightbox(this)">
-      <img src="https://placehold.co/600x700/111111/c8a97e?text=Anime+04" alt="Anime Print 04" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
-      <div class="overlay"><span class="overlay-text">Anime Print 04</span></div>
-    </div>
-    <div class="gallery-item" onclick="openLightbox(this)">
-      <img src="https://placehold.co/600x800/111111/c8a97e?text=Anime+05" alt="Anime Print 05" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
-      <div class="overlay"><span class="overlay-text">Anime Print 05</span></div>
-    </div>
-    <div class="gallery-item" onclick="openLightbox(this)">
-      <img src="https://placehold.co/600x600/111111/c8a97e?text=Anime+06" alt="Anime Print 06" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
-      <div class="overlay"><span class="overlay-text">Anime Print 06</span></div>
-    </div>
-
   </div>
 </main>
 
-<!-- Lightbox -->
+<footer>
+  <div class="footer-info">
+    <p>© 2025 CAVERSEN PRINT</p>
+    <p>MOROCCO — FREE SHIPPING NATIONWIDE</p>
+  </div>
+  <div class="footer-socials">
+    <a href="https://www.instagram.com/caversen.maroc/" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://wa.me/212700256668" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  </div>
+</footer>
+
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <button class="lightbox-close" onclick="closeLightbox()">×</button>
   <img id="lightbox-img" src="" alt=""/>
