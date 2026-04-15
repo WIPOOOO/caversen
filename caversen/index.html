@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Caversen Print</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #1e1e1e;
+      --accent: #c8a97e;
+      --text: #f0ece4;
+      --muted: #5a5550;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    /* subtle grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 150px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      padding: 60px 40px 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 32px;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(42px, 6vw, 72px);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .tagline {
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      padding-bottom: 8px;
+    }
+
+    main {
+      position: relative;
+      z-index: 1;
+      padding: 60px 40px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 2px;
+    }
+
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 28px 24px;
+      background: var(--surface);
+      text-decoration: none;
+      color: var(--text);
+      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.25s;
+      min-height: 160px;
+      border: 1px solid var(--border);
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0%;
+      height: 2px;
+      background: var(--accent);
+      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .card:hover {
+      background: #161616;
+    }
+
+    .card:hover::after {
+      width: 100%;
+    }
+
+    .card-number {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      color: var(--muted);
+      margin-bottom: 12px;
+      transition: color 0.25s;
+    }
+
+    .card:hover .card-number {
+      color: var(--accent);
+    }
+
+    .card-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.05em;
+      line-height: 1;
+    }
+
+    .card-arrow {
+      position: absolute;
+      top: 24px;
+      right: 24px;
+      font-size: 18px;
+      color: var(--muted);
+      transition: transform 0.25s, color 0.25s;
+    }
+
+    .card:hover .card-arrow {
+      transform: translate(3px, -3px);
+      color: var(--accent);
+    }
+
+    footer {
+      position: relative;
+      z-index: 1;
+      border-top: 1px solid var(--border);
+      padding: 24px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    footer p {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    /* staggered fade-in */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card {
+      animation: fadeUp 0.5s ease both;
+    }
+    .card:nth-child(1) { animation-delay: 0.05s; }
+    .card:nth-child(2) { animation-delay: 0.10s; }
+    .card:nth-child(3) { animation-delay: 0.15s; }
+    .card:nth-child(4) { animation-delay: 0.20s; }
+    .card:nth-child(5) { animation-delay: 0.25s; }
+    .card:nth-child(6) { animation-delay: 0.30s; }
+    .card:nth-child(7) { animation-delay: 0.35s; }
+    .card:nth-child(8) { animation-delay: 0.40s; }
+
+    @media (max-width: 600px) {
+      header { padding: 36px 20px 24px; flex-direction: column; align-items: flex-start; gap: 8px; }
+      main { padding: 40px 20px; }
+      footer { padding: 20px; flex-direction: column; gap: 8px; text-align: center; }
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">Caversen<span>.</span>Print</div>
+  <div class="tagline">Premium Wall Art &amp; Decor</div>
+</header>
+
+<main>
+  <p class="section-label">Browse Collections</p>
+  <div class="grid">
+
+    <a class="card" href="anime/index.html">
+      <span class="card-number">01</span>
+      <span class="card-name">Anime</span>
+      <span class="card-arrow">↗</span>
+    </a>
+
+    <a class="card" href="bikes/index.html">
+      <span class="card-number">02</span>
+      <span class="card-name">Bikes</span>
+      <span class="card-arrow">↗</span>
+    </a>
+
+    <a class="card" href="cars/index.html">
+      <span class="card-number">03</span>
+      <span class="card-name">Cars</span>
+      <span class="card-arrow">↗</span>
+    </a>
+
+    <a class="card" href="football/index.html">
+      <span class="card-number">04</span>
+      <span class="card-name">Football</span>
+      <span class="card-arrow">↗</span>
+    </a>
+
+    <a class="card" href="gaming/index.html">
+      <span class="card-number">05</span>
+      <span class="card-name">Gaming</span>
+      <span class="card-arrow">↗</span>
+    </a>
+
+    <a class="card" href="islam/index.html">
+      <span class="card-number">06</span>
+      <span class="card-name">Islam</span>
+      <span class="card-arrow">↗</span>
+    </a>
+
+    <a class="card" href="movies/index.html">
+      <span class="card-number">07</span>
+      <span class="card-name">Movies</span>
+      <span class="card-arrow">↗</span>
+    </a>
+
+    <a class="card" href="quotes/index.html">
+      <span class="card-number">08</span>
+      <span class="card-name">Quotes</span>
+      <span class="card-arrow">↗</span>
+    </a>
+
+  </div>
+</main>
+
+<footer>
+  <p>© 2025 Caversen Print</p>
+  <p>Morocco — Free Shipping Nationwide</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <!-- ✏️ Change the title per category -->
+  <title>Anime — Caversen Print</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --surface: #111111;
+      --border: #1e1e1e;
+      --accent: #c8a97e;
+      --text: #f0ece4;
+      --muted: #5a5550;
+    }
+
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 150px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    header {
+      position: relative;
+      z-index: 1;
+      padding: 40px 40px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .back {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 12px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+    .back:hover { color: var(--text); }
+    .back-arrow { font-size: 16px; }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.04em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .logo span { color: var(--accent); }
+
+    main {
+      position: relative;
+      z-index: 1;
+      padding: 50px 40px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(48px, 8vw, 96px);
+      letter-spacing: 0.03em;
+      line-height: 0.9;
+      margin-bottom: 8px;
+    }
+
+    .page-meta {
+      font-size: 12px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 48px;
+    }
+
+    /* ─── GALLERY GRID ─── */
+    .gallery {
+      columns: 3;
+      column-gap: 3px;
+    }
+
+    @media (max-width: 900px) { .gallery { columns: 2; } }
+    @media (max-width: 500px) { .gallery { columns: 1; } }
+
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 3px;
+      position: relative;
+      overflow: hidden;
+      cursor: zoom-in;
+      background: var(--surface);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      display: block;
+      transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s;
+      opacity: 0;
+    }
+
+    .gallery-item img.loaded { opacity: 1; }
+
+    .gallery-item:hover img {
+      transform: scale(1.04);
+    }
+
+    .gallery-item .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      align-items: flex-end;
+      padding: 16px;
+    }
+
+    .gallery-item:hover .overlay {
+      opacity: 1;
+    }
+
+    .overlay-text {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--text);
+    }
+
+    /* ─── LIGHTBOX ─── */
+    .lightbox {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      cursor: zoom-out;
+    }
+
+    .lightbox.open { display: flex; }
+
+    .lightbox img {
+      max-width: 90vw;
+      max-height: 90vh;
+      object-fit: contain;
+      box-shadow: 0 0 80px rgba(0,0,0,0.8);
+    }
+
+    .lightbox-close {
+      position: fixed;
+      top: 24px;
+      right: 30px;
+      font-size: 32px;
+      color: var(--muted);
+      cursor: pointer;
+      transition: color 0.2s;
+      z-index: 101;
+      background: none;
+      border: none;
+    }
+    .lightbox-close:hover { color: var(--text); }
+
+    /* stagger */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .gallery-item {
+      animation: fadeUp 0.4s ease both;
+    }
+
+    @media (max-width: 600px) {
+      header { padding: 24px 20px; }
+      main { padding: 32px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a class="back" href="../index.html">
+    <span class="back-arrow">←</span> All Collections
+  </a>
+  <a class="logo" href="../index.html">Caversen<span>.</span>Print</a>
+</header>
+
+<main>
+  <!-- ✏️ Change this title per category -->
+  <h1 class="page-title">Anime</h1>
+  <p class="page-meta">Caversen Print — Collection</p>
+
+  <div class="gallery" id="gallery">
+    <!--
+      ✏️ HOW TO ADD IMAGES:
+      1. Upload your images to the matching folder on GitHub (e.g. /anime/)
+      2. Copy this block for each image and update the src path.
+      3. The alt text will show on hover.
+
+      Example:
+      <div class="gallery-item" onclick="openLightbox(this)">
+        <img src="your-image-name.jpg" alt="Print Title" loading="lazy" onload="this.classList.add('loaded')"/>
+        <div class="overlay"><span class="overlay-text">Print Title</span></div>
+      </div>
+    -->
+
+    <!-- PLACEHOLDER ITEMS — delete these once you add real images -->
+    <div class="gallery-item" onclick="openLightbox(this)">
+      <img src="https://placehold.co/600x800/111111/c8a97e?text=Anime+01" alt="Anime Print 01" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
+      <div class="overlay"><span class="overlay-text">Anime Print 01</span></div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox(this)">
+      <img src="https://placehold.co/600x600/111111/c8a97e?text=Anime+02" alt="Anime Print 02" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
+      <div class="overlay"><span class="overlay-text">Anime Print 02</span></div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox(this)">
+      <img src="https://placehold.co/600x900/111111/c8a97e?text=Anime+03" alt="Anime Print 03" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
+      <div class="overlay"><span class="overlay-text">Anime Print 03</span></div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox(this)">
+      <img src="https://placehold.co/600x700/111111/c8a97e?text=Anime+04" alt="Anime Print 04" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
+      <div class="overlay"><span class="overlay-text">Anime Print 04</span></div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox(this)">
+      <img src="https://placehold.co/600x800/111111/c8a97e?text=Anime+05" alt="Anime Print 05" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
+      <div class="overlay"><span class="overlay-text">Anime Print 05</span></div>
+    </div>
+    <div class="gallery-item" onclick="openLightbox(this)">
+      <img src="https://placehold.co/600x600/111111/c8a97e?text=Anime+06" alt="Anime Print 06" loading="lazy" onload="this.classList.add('loaded')" style="opacity:1"/>
+      <div class="overlay"><span class="overlay-text">Anime Print 06</span></div>
+    </div>
+
+  </div>
+</main>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">×</button>
+  <img id="lightbox-img" src="" alt=""/>
+</div>
+
+<script>
+  function openLightbox(item) {
+    const img = item.querySelector('img');
+    document.getElementById('lightbox-img').src = img.src;
+    document.getElementById('lightbox-img').alt = img.alt;
+    document.getElementById('lightbox').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeLightbox() {
+    document.getElementById('lightbox').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+</script>
+
+</body>
+</html>
