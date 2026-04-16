@@ -18,8 +18,8 @@
       --muted: #888; 
     }
     
-    /* Smooth Cross-Fade Animation */
-    @keyframes pageEnter {
+    /* Smooth Transitions */
+    @keyframes pageFade {
       from { opacity: 0; }
       to { opacity: 1; }
     }
@@ -29,9 +29,12 @@
       color: var(--text); 
       font-family: 'Montserrat', sans-serif; 
       line-height: 1.6;
-      animation: pageEnter 0.6s ease-in-out;
+      animation: pageFade 0.6s ease-in-out;
       overflow-x: hidden;
+      transition: opacity 0.5s ease-in-out;
     }
+
+    .fade-out { opacity: 0; }
 
     header { 
       position: fixed;
@@ -56,10 +59,10 @@
       display: flex;
       align-items: center;
       width: fit-content;
-      transition: 0.3s;
+      cursor: pointer;
     }
     
-    .back-arrow:hover { transform: translateX(-5px); opacity: 0.6; }
+    .back-arrow:hover { transform: translateX(-5px); opacity: 0.6; transition: 0.3s; }
 
     .logo img { height: 78px; width: auto; display: block; }
 
@@ -106,7 +109,39 @@
     }
 
     .gallery-item img { width: 100%; display: block; }
-    
+
+    /* Lightbox Styles */
+    .lightbox { 
+      display: none; 
+      position: fixed; 
+      inset: 0; 
+      background: rgba(0, 0, 0, 0.95); 
+      z-index: 2000; 
+      align-items: center; 
+      justify-content: center; 
+      backdrop-filter: blur(8px);
+    }
+
+    .lightbox.open { display: flex; animation: pageFade 0.3s ease; }
+
+    .lightbox img { 
+      max-width: 90vw; 
+      max-height: 85vh; 
+      object-fit: contain; 
+    }
+
+    .close-lightbox {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      color: white;
+      font-size: 35px;
+      cursor: pointer;
+      opacity: 0.5;
+      transition: 0.3s;
+    }
+    .close-lightbox:hover { opacity: 1; }
+
     footer { 
       padding: 40px 20px; 
       text-align: center;
@@ -128,8 +163,8 @@
 <body>
 
 <header>
-  <a class="back-arrow" href="../index.html"><i class="fa-solid fa-chevron-left"></i></a>
-  <a class="logo" href="../index.html">
+  <a class="back-arrow" onclick="smoothBack()"><i class="fa-solid fa-chevron-left"></i></a>
+  <a class="logo" onclick="smoothBack()">
     <img src="../logo.png" alt="Logo">
   </a>
   <div class="header-socials">
@@ -147,21 +182,51 @@
   <p>© 2026 CAVERSEN PRINT — MOROCCO</p>
 </footer>
 
+<div class="lightbox" id="lightbox">
+  <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+  <img id="lightbox-img" src="">
+</div>
+
 <script>
-  // Dynamic Gallery Loading
   const gallery = document.getElementById('gallery');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
   const maxImages = 100; 
 
+  // Smooth transition back to index
+  function smoothBack() {
+    document.body.classList.add('fade-out');
+    setTimeout(() => {
+      window.location.href = '../index.html';
+    }, 500);
+  }
+
+  // Load Gallery
   for (let i = 1; i <= maxImages; i++) {
     const fileName = `${i}.png`;
     const item = document.createElement('div');
     item.className = 'gallery-item';
     item.innerHTML = `<img src="${fileName}" alt="Print ${i}" loading="lazy">`;
     
+    item.onclick = () => {
+      lightboxImg.src = fileName;
+      lightbox.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    };
+    
     const imgTest = new Image();
     imgTest.src = fileName;
     imgTest.onload = () => gallery.appendChild(item);
   }
+
+  function closeLightbox() {
+    lightbox.classList.remove('open');
+    document.body.style.overflow = 'auto';
+  }
+
+  lightbox.onclick = (e) => {
+    if (e.target === lightbox) closeLightbox();
+  };
 </script>
 
 </body>
