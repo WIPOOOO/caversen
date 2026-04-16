@@ -18,10 +18,16 @@
       --muted: #888; 
     }
     
-    html, body { 
+    html {
+      /* This ensures the logo stays aligned with the sub-pages */
+      scrollbar-gutter: stable;
+    }
+
+    body { 
       height: 100vh;
-      width: 100vw;
-      overflow-x: hidden; 
+      width: 100%;
+      /* Keeps the main page from scrolling */
+      overflow: hidden; 
       background-color: var(--bg-dark);
       color: var(--text); 
       font-family: 'Montserrat', sans-serif; 
@@ -50,7 +56,7 @@
 
     .header-left { display: flex; justify-content: flex-start; }
 
-    .logo { cursor: pointer; display: flex; justify-content: center; }
+    .logo { cursor: pointer; display: flex; justify-content: center; text-decoration: none; }
     .logo img { height: 78px; width: auto; display: block; }
 
     .header-socials { display: flex; gap: 20px; justify-content: flex-end; }
@@ -69,58 +75,38 @@
     }
     
     .hero-title { 
-      font-size: 14px; 
-      font-weight: 300; 
-      letter-spacing: 6px; 
-      text-transform: uppercase; 
-      margin-bottom: 40px; 
-      color: var(--muted);
-      text-align: center;
+      font-size: 14px; font-weight: 300; letter-spacing: 6px; 
+      text-transform: uppercase; margin-bottom: 40px; 
+      color: var(--muted); text-align: center;
     }
 
     .collection-grid { 
-      display: grid; 
-      grid-template-columns: repeat(4, 1fr); 
-      gap: 18px; 
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; 
     }
 
     .card { 
-      background: var(--glass); 
-      border: 1px solid var(--border); 
-      border-radius: 20px; 
-      backdrop-filter: blur(15px);
-      -webkit-backdrop-filter: blur(15px);
-      aspect-ratio: 1.15 / 1; 
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      text-decoration: none; 
-      color: var(--text); 
-      will-change: transform;
+      background: var(--glass); border: 1px solid var(--border); 
+      border-radius: 20px; backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px); aspect-ratio: 1.15 / 1; 
+      display: flex; justify-content: center; align-items: center;
+      text-decoration: none; color: var(--text); 
       transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
     }
 
     .card:hover { 
-      background: var(--glass-hover);
-      border-color: rgba(255, 255, 255, 0.3);
+      background: var(--glass-hover); border-color: rgba(255, 255, 255, 0.3);
       transform: translateY(-5px);
     }
     
     .card h2 { font-size: 1.1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
 
     footer { 
-      flex-shrink: 0;
-      padding: 20px; 
-      text-align: center;
-      font-size: 10px; 
-      color: var(--muted); 
-      letter-spacing: 2.5px; 
+      flex-shrink: 0; padding: 20px; text-align: center;
+      font-size: 10px; color: var(--muted); letter-spacing: 2.5px; 
       border-top: 1px solid var(--border);
     }
     
-    @media (max-width: 900px) {
-      .collection-grid { grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (max-width: 900px) { .collection-grid { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 500px) {
       body { overflow-y: auto; height: auto; }
       header { padding: 10px 20px; }
