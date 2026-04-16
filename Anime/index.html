@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Anime — Caversen Print</title>
+  <title>Collection — Caversen Print</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -31,7 +31,6 @@
       animation: pageEnter 0.6s ease-in-out;
       overflow-x: hidden;
       scroll-behavior: smooth;
-      /* Prevent horizontal shift when scrollbar appears */
       width: 100vw;
     }
 
@@ -45,7 +44,6 @@
       -webkit-backdrop-filter: blur(15px);
       padding: 10px 40px; 
       display: grid; 
-      /* FORCE: 3 perfectly equal columns regardless of content */
       grid-template-columns: 1fr 1fr 1fr; 
       align-items: center; 
       border-bottom: 1px solid var(--border); 
@@ -58,6 +56,8 @@
       text-decoration: none; 
       color: var(--text); 
       font-size: 20px; 
+      display: flex;
+      align-items: center;
       transition: 0.3s;
     }
     
@@ -96,6 +96,7 @@
       background: var(--glass); 
       border: 1px solid var(--border); 
       border-radius: 15px; 
+      backdrop-filter: blur(10px);
       overflow: hidden;
       cursor: zoom-in;
       transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
@@ -104,6 +105,7 @@
     .gallery-item:hover { 
       border-color: rgba(255, 255, 255, 0.3);
       transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.7);
     }
 
     .gallery-item img { width: 100%; display: block; }
@@ -122,7 +124,14 @@
     }
 
     .lightbox.active { display: flex; animation: pageEnter 0.3s ease; }
-    .lightbox img { max-width: 90%; max-height: 85%; border-radius: 10px; cursor: default; }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 85%;
+      border-radius: 10px;
+      box-shadow: 0 0 50px rgba(0,0,0,1);
+      cursor: default;
+    }
 
     .close-lightbox {
       position: absolute;
@@ -131,6 +140,7 @@
       color: white;
       font-size: 35px;
       cursor: pointer;
+      transition: 0.3s;
     }
 
     #backToTop {
@@ -190,7 +200,7 @@
 </header>
 
 <main>
-  <h1 class="page-title">Anime</h1>
+  <h1 class="page-title">Collection</h1>
   <div class="gallery" id="gallery"></div>
 </main>
 
