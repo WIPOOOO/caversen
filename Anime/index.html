@@ -10,25 +10,45 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root { --bg: #0a0a0a; --surface: #111111; --border: #1e1e1e; --accent: #c8a97e; --text: #f0ece4; --muted: #5a5550; }
     html, body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; min-height: 100vh; }
-    header { position: relative; z-index: 1; padding: 40px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
+    
+    /* STICKY HEADER FIX */
+    header { 
+      position: sticky; 
+      top: 0; 
+      z-index: 100; 
+      background: var(--bg); /* Keeps header opaque when scrolling */
+      padding: 30px 40px; 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      border-bottom: 1px solid var(--border); 
+    }
+
     .back { text-decoration: none; color: var(--muted); font-size: 12px; letter-spacing: 0.15em; text-transform: uppercase; transition: color 0.2s; }
     .back:hover { color: var(--text); }
     .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: var(--text); text-decoration: none; }
     .logo span { color: var(--accent); }
+    
     main { padding: 50px 40px; max-width: 1200px; margin: 0 auto; }
     .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 8vw, 96px); margin-bottom: 48px; }
     .gallery { columns: 3; column-gap: 20px; }
     .gallery-item { break-inside: avoid; margin-bottom: 20px; background: var(--surface); cursor: zoom-in; border: 1px solid var(--border); overflow: hidden; }
     .gallery-item img { width: 100%; display: block; transition: transform 0.4s; }
     .gallery-item:hover img { transform: scale(1.05); }
+    
     footer { padding: 40px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
     .footer-socials { display: flex; gap: 20px; }
     .footer-socials a { color: var(--muted); font-size: 20px; transition: 0.3s; }
     .footer-socials a:hover { color: var(--accent); }
-    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; align-items: center; justify-content: center; }
+    
+    .lightbox { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 1000; align-items: center; justify-content: center; }
     .lightbox.open { display: flex; }
     .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
-    @media (max-width: 800px) { .gallery { columns: 2; } }
+    
+    @media (max-width: 800px) { 
+        .gallery { columns: 2; } 
+        header { padding: 20px; }
+    }
     @media (max-width: 500px) { .gallery { columns: 1; } }
   </style>
 </head>
@@ -41,8 +61,7 @@
 
 <main>
   <h1 class="page-title">Anime</h1>
-  <div class="gallery" id="gallery">
-    </div>
+  <div class="gallery" id="gallery"></div>
 </main>
 
 <footer>
@@ -59,7 +78,6 @@
 
 <script>
   const gallery = document.getElementById('gallery');
-  // Change 100 to the max number of images you expect to have
   const maxImages = 100; 
 
   for (let i = 1; i <= maxImages; i++) {
@@ -71,7 +89,7 @@
       const item = document.createElement('div');
       item.className = 'gallery-item';
       item.onclick = function() { openLightbox(fileName); };
-      item.innerHTML = `<img src="${fileName}" alt="Anime ${i}">`;
+      item.innerHTML = `<img src="${fileName}" alt="Print ${i}">`;
       gallery.appendChild(item);
     };
   }
