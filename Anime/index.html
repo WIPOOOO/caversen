@@ -18,7 +18,6 @@
       --muted: #888; 
     }
     
-    /* Smooth Transitions */
     @keyframes pageFade {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -52,18 +51,21 @@
       z-index: 1000;
     }
 
+    .header-left { display: flex; justify-content: flex-start; }
+
     .back-arrow { 
       text-decoration: none; 
       color: var(--text); 
       font-size: 20px; 
       display: flex;
       align-items: center;
-      width: fit-content;
       cursor: pointer;
+      transition: 0.3s;
     }
-    
-    .back-arrow:hover { transform: translateX(-5px); opacity: 0.6; transition: 0.3s; }
+    .back-arrow:hover { transform: translateX(-5px); opacity: 0.6; }
 
+    /* Fix: Added pointer cursor for the logo */
+    .logo { cursor: pointer; display: block; }
     .logo img { height: 78px; width: auto; display: block; }
 
     .header-socials { display: flex; gap: 20px; justify-content: flex-end; }
@@ -110,7 +112,6 @@
 
     .gallery-item img { width: 100%; display: block; }
 
-    /* Lightbox Styles */
     .lightbox { 
       display: none; 
       position: fixed; 
@@ -123,12 +124,7 @@
     }
 
     .lightbox.open { display: flex; animation: pageFade 0.3s ease; }
-
-    .lightbox img { 
-      max-width: 90vw; 
-      max-height: 85vh; 
-      object-fit: contain; 
-    }
+    .lightbox img { max-width: 90vw; max-height: 85vh; object-fit: contain; }
 
     .close-lightbox {
       position: absolute;
@@ -163,10 +159,14 @@
 <body>
 
 <header>
-  <a class="back-arrow" onclick="smoothBack()"><i class="fa-solid fa-chevron-left"></i></a>
-  <a class="logo" onclick="smoothBack()">
+  <div class="header-left">
+    <a class="back-arrow" onclick="smoothBack()"><i class="fa-solid fa-chevron-left"></i></a>
+  </div>
+  
+  <div class="logo" onclick="smoothBack()">
     <img src="../logo.png" alt="Logo">
-  </a>
+  </div>
+  
   <div class="header-socials">
     <a href="https://www.instagram.com/caversen.maroc/" target="_blank"><i class="fab fa-instagram"></i></a>
     <a href="https://wa.me/212700256668" target="_blank"><i class="fab fa-whatsapp"></i></a>
@@ -193,7 +193,6 @@
   const lightboxImg = document.getElementById('lightbox-img');
   const maxImages = 100; 
 
-  // Smooth transition back to index
   function smoothBack() {
     document.body.classList.add('fade-out');
     setTimeout(() => {
@@ -201,7 +200,6 @@
     }, 500);
   }
 
-  // Load Gallery
   for (let i = 1; i <= maxImages; i++) {
     const fileName = `${i}.png`;
     const item = document.createElement('div');
