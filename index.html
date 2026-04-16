@@ -14,31 +14,34 @@
       background: var(--bg); 
       color: var(--text); 
       font-family: 'Montserrat', sans-serif; 
-      min-height: 100vh; 
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
     
     header { 
       position: sticky; top: 0; z-index: 100; background: var(--bg);
       padding: 15px 40px; 
-      display: grid; /* Changed to Grid for perfect centering */
+      display: grid; 
       grid-template-columns: 1fr auto 1fr; 
       align-items: center; 
       border-bottom: 1px solid var(--border); 
     }
 
-    /* Column 1: Empty spacer */
     .header-spacer { display: block; }
-
-    /* Column 2: Centered Logo */
     .logo { display: flex; justify-content: center; text-decoration: none; }
     .logo img { height: 50px; width: auto; }
-
-    /* Column 3: Social Icons on the right */
     .header-socials { display: flex; gap: 20px; justify-content: flex-end; }
     .header-socials a { color: var(--muted); font-size: 18px; transition: 0.3s; text-decoration: none; }
     .header-socials a:hover { color: var(--text); }
 
-    main { padding: 60px 40px; max-width: 1200px; margin: 0 auto; }
+    main { 
+      padding: 60px 40px; 
+      max-width: 1200px; 
+      margin: 0 auto; 
+      flex: 1; /* Pushes footer to the bottom */
+      width: 100%;
+    }
     
     .hero-title { 
       font-size: 22px; 
@@ -50,13 +53,24 @@
     }
 
     .collection-grid { 
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+      gap: 25px; 
     }
 
+    /* Cleaned up Boxes */
     .card { 
-      background: var(--surface); border: 1px solid var(--border); 
-      padding: 40px 30px; text-decoration: none; color: var(--text); 
+      background: var(--surface); 
+      border: 1px solid var(--border); 
+      aspect-ratio: 3 / 2; /* Keeps boxes consistent */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-decoration: none; 
+      color: var(--text); 
       transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+      text-align: center;
     }
     .card:hover { border-color: var(--accent); transform: translateY(-5px); background: #161616; }
     
@@ -68,21 +82,30 @@
     }
     .card p { color: var(--muted); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; margin-top: 10px; }
 
-    footer { padding: 40px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 10px; color: var(--muted); letter-spacing: 1px; }
+    /* Centered Footer at the very bottom */
+    footer { 
+      padding: 30px 40px; 
+      border-top: 1px solid var(--border); 
+      text-align: center;
+      font-size: 10px; 
+      color: var(--muted); 
+      letter-spacing: 1px; 
+    }
     
     @media (max-width: 600px) { 
       header { padding: 15px 20px; }
       .header-socials { gap: 15px; }
+      main { padding: 40px 20px; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="header-spacer"></div> <a class="logo" href="index.html">
+  <div class="header-spacer"></div>
+  <a class="logo" href="index.html">
     <img src="logo.png" alt="Logo">
   </a>
-  
   <div class="header-socials">
     <a href="https://www.instagram.com/caversen.maroc/" target="_blank"><i class="fab fa-instagram"></i></a>
     <a href="https://wa.me/212700256668" target="_blank"><i class="fab fa-whatsapp"></i></a>
