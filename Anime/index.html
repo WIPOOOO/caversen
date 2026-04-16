@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes"/>
   <title>Anime — Caversen Print</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -72,35 +72,48 @@
     .gallery-item:hover { border-color: rgba(255, 255, 255, 0.3); transform: translateY(-8px); }
     .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-    /* Lightbox Optimized for Pinch Zoom */
+    /* Fix: Zoomable Lightbox */
     .lightbox { 
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); 
       z-index: 2000; align-items: center; justify-content: center; backdrop-filter: blur(8px);
-      overflow: auto; /* Allows scrolling if zoomed in */
+      overflow: hidden; 
+      touch-action: none;
     }
     .lightbox.open { display: flex; }
+
+    /* Image container allows inner zooming without affecting the UI */
+    .lightbox-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
     .lightbox img { 
-        max-width: 95vw; 
-        max-height: 85vh; 
-        object-fit: contain; 
-        pointer-events: auto; /* Ensures the image can receive touch events for zoom */
+      max-width: 95vw; 
+      max-height: 85vh; 
+      object-fit: contain; 
+      transition: transform 0.1s ease-out;
+      will-change: transform;
     }
 
     .close-lightbox {
       position: fixed; top: 30px; right: 40px; color: white;
-      font-size: 35px; cursor: pointer; opacity: 0.5; transition: 0.3s;
+      font-size: 35px; cursor: pointer; opacity: 0.7; transition: 0.3s;
       z-index: 2100;
+      text-shadow: 0 0 10px rgba(0,0,0,0.5);
     }
 
     footer { padding: 40px 20px; text-align: center; font-size: 10px; color: var(--muted); border-top: 1px solid var(--border); }
 
-    /* Fix: Mobile Force One Column & spacing */
     @media (max-width: 800px) { 
-      .gallery { grid-template-columns: 1fr; } /* Force single image per row */
+      .gallery { grid-template-columns: 1fr; } 
       .logo img { height: 60px; }
       header { padding: 10px 20px; }
       main { padding: 120px 20px 60px; }
-      .close-lightbox { top: 20px; right: 25px; font-size: 40px; }
+      .close-lightbox { top: 20px; right: 25px; font-size: 40px; opacity: 1; }
     }
   </style>
 </head>
@@ -122,7 +135,9 @@
 
 <div class="lightbox" id="lightbox">
   <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
-  <img id="lightbox-img" src="">
+  <div class="lightbox-content">
+    <img id="lightbox-img" src="">
+  </div>
 </div>
 
 <script>
@@ -135,7 +150,7 @@
     setTimeout(() => { window.location.href = '../index.html'; }, 500);
   }
 
-  // Load Images
+  // Gallery Loader
   for (let i = 1; i <= 100; i++) {
     const fileName = `${i}.png`;
     const item = document.createElement('div');
@@ -145,19 +160,72 @@
       lightboxImg.src = fileName;
       lightbox.classList.add('open');
       document.body.style.overflow = 'hidden';
+      resetZoom();
     };
-    
-    const imgTest = new Image();
-    imgTest.src = fileName;
-    imgTest.onload = () => gallery.appendChild(item);
+    gallery.appendChild(item);
   }
 
   function closeLightbox() {
     lightbox.classList.remove('open');
     document.body.style.overflow = 'auto';
+    resetZoom();
   }
 
-  lightbox.onclick = (e) => { if (e.target === lightbox) closeLightbox(); };
+  // --- Pinch to Zoom Logic ---
+  let scale = 1;
+  let pointX = 0;
+  let pointY = 0;
+  let start = { x: 0, y: 0 };
+
+  function setTransform() {
+    lightboxImg.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
+  }
+
+  function resetZoom() {
+    scale = 1; pointX = 0; pointY = 0;
+    setTransform();
+  }
+
+  lightbox.onmousedown = (e) => {
+    if (e.target !== lightboxImg) return;
+    e.preventDefault();
+    start = { x: e.clientX - pointX, y: e.clientY - pointY };
+    lightbox.onmousemove = (e) => {
+      pointX = e.clientX - start.x;
+      pointY = e.clientY - start.y;
+      setTransform();
+    };
+  };
+
+  window.onmouseup = () => { lightbox.onmousemove = null; };
+
+  lightbox.onwheel = (e) => {
+    e.preventDefault();
+    const delta = e.wheelDelta ? e.wheelDelta : -e.deltaY;
+    scale = (delta > 0) ? (scale * 1.1) : (scale / 1.1);
+    if (scale < 1) scale = 1;
+    setTransform();
+  };
+
+  // Mobile Touch Support for Zoom
+  let initialDist = 0;
+  lightbox.ontouchstart = (e) => {
+    if (e.touches.length === 2) {
+      initialDist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+    }
+  };
+
+  lightbox.ontouchmove = (e) => {
+    if (e.touches.length === 2) {
+      const dist = Math.hypot(e.touches[0].pageX - e.touches[1].pageX, e.touches[0].pageY - e.touches[1].pageY);
+      scale = (dist / initialDist);
+      if (scale < 1) scale = 1;
+      setTransform();
+    }
+  };
+
+  // Close on background click
+  lightbox.onclick = (e) => { if (e.target === lightbox || e.target.className === 'lightbox-content') closeLightbox(); };
 </script>
 </body>
 </html>
