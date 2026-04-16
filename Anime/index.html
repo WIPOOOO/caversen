@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Anime — Caversen Print</title>
+  <title>Bikes — Caversen Print</title>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <style>
@@ -30,6 +30,7 @@
       line-height: 1.6;
       animation: pageEnter 0.6s ease-in-out;
       overflow-x: hidden;
+      scroll-behavior: smooth; /* Native smooth scrolling */
     }
 
     header { 
@@ -141,6 +142,40 @@
     }
 
     .close-lightbox:hover { opacity: 0.5; }
+
+    /* BACK TO TOP BUTTON */
+    #backToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 50px;
+      height: 50px;
+      background: var(--glass);
+      border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
+      color: var(--text);
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      font-size: 18px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.4s ease;
+      z-index: 1500;
+    }
+
+    #backToTop.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    #backToTop:hover {
+      background: var(--glass-hover);
+      transform: translateY(-5px);
+      border-color: rgba(255, 255, 255, 0.4);
+    }
     
     footer { 
       padding: 40px 20px; 
@@ -157,6 +192,7 @@
         .logo img { height: 60px; }
         main { padding-top: 130px; }
         .close-lightbox { top: 20px; right: 20px; }
+        #backToTop { bottom: 20px; right: 20px; width: 45px; height: 45px; }
     }
     @media (max-width: 500px) { .gallery { grid-template-columns: 1fr; } }
   </style>
@@ -175,13 +211,17 @@
 </header>
 
 <main>
-  <h1 class="page-title">Anime Collection</h1>
+  <h1 class="page-title">Bikes Collection</h1>
   <div class="gallery" id="gallery"></div>
 </main>
 
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <span class="close-lightbox">&times;</span>
   <img id="lightbox-img" src="" alt="Enlarged Print" onclick="event.stopPropagation()">
+</div>
+
+<div id="backToTop" onclick="scrollToTop()">
+  <i class="fa-solid fa-chevron-up"></i>
 </div>
 
 <footer>
@@ -192,27 +232,41 @@
   const gallery = document.getElementById('gallery');
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
+  const backToTop = document.getElementById('backToTop');
   const maxImages = 100; 
 
-  // Functions for Lightbox
+  // Lightbox Functions
   function openLightbox(src) {
     lightboxImg.src = src;
     lightbox.classList.add('active');
-    document.body.style.overflow = 'hidden'; // Prevent scroll
+    document.body.style.overflow = 'hidden';
   }
 
   function closeLightbox() {
     lightbox.classList.remove('active');
-    document.body.style.overflow = 'auto'; // Restore scroll
+    document.body.style.overflow = 'auto';
   }
 
+  // Scroll Functions
+  window.onscroll = function() {
+    if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+      backToTop.classList.add('show');
+    } else {
+      backToTop.classList.remove('show');
+    }
+  };
+
+  function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Gallery Loading
   for (let i = 1; i <= maxImages; i++) {
     const fileName = `${i}.png`;
     const item = document.createElement('div');
     item.className = 'gallery-item';
     item.innerHTML = `<img src="${fileName}" alt="Print ${i}" loading="lazy">`;
     
-    // Open lightbox on click
     item.onclick = () => openLightbox(fileName);
     
     const imgTest = new Image();
