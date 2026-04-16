@@ -32,25 +32,35 @@
 
     .fade-out { opacity: 0; }
 
+    /* Exact Header from Anime Page (without back arrow) */
     header { 
-      flex-shrink: 0;
-      padding: 15px 40px; 
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2); 
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      padding: 10px 40px; 
       display: grid; 
       grid-template-columns: 1fr auto 1fr; 
       align-items: center; 
       border-bottom: 1px solid var(--border); 
-      z-index: 10;
+      z-index: 1000;
     }
 
+    .header-left { display: flex; justify-content: flex-start; }
+
+    .logo { cursor: pointer; display: block; }
     .logo img { height: 78px; width: auto; display: block; }
-    
+
     .header-socials { display: flex; gap: 20px; justify-content: flex-end; }
-    .header-socials a { color: var(--muted); font-size: 19px; transition: 0.3s; }
+    .header-socials a { color: var(--muted); font-size: 19px; transition: 0.3s; text-decoration: none; }
     .header-socials a:hover { color: var(--text); }
 
     main { 
       flex: 1;
-      padding: 20px 40px; 
+      padding: 140px 40px 20px; /* Increased top padding to account for fixed header */
       max-width: 1400px; 
       margin: 0 auto; 
       width: 100%;
@@ -100,6 +110,7 @@
     .card h2 { font-size: 1.1rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; }
 
     footer { 
+      flex-shrink: 0;
       padding: 20px; 
       text-align: center;
       font-size: 10px; 
@@ -113,16 +124,20 @@
     }
     @media (max-width: 500px) {
       body { overflow-y: auto; height: auto; }
-      .collection-grid { grid-template-columns: 1fr; }
+      header { padding: 10px 20px; }
       .logo img { height: 60px; }
+      .collection-grid { grid-template-columns: 1fr; }
+      main { padding-top: 100px; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div></div>
-  <a class="logo" href="index.html"><img src="logo.png" alt="Logo"></a>
+  <div class="header-left"></div> <div class="logo" onclick="location.reload()">
+    <img src="logo.png" alt="Logo">
+  </div>
+  
   <div class="header-socials">
     <a href="https://www.instagram.com/caversen.maroc/" target="_blank"><i class="fab fa-instagram"></i></a>
     <a href="https://wa.me/212700256668" target="_blank"><i class="fab fa-whatsapp"></i></a>
@@ -146,8 +161,8 @@
 <footer><p>© 2026 CAVERSEN PRINT — MOROCCO</p></footer>
 
 <script>
-  // Smooth transition for all internal links
-  document.querySelectorAll('.card, .logo').forEach(link => {
+  // Smooth transition for clicking collections
+  document.querySelectorAll('.card').forEach(link => {
     link.addEventListener('click', e => {
       e.preventDefault();
       const target = link.href;
