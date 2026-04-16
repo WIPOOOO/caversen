@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Collection — Caversen Print</title>
   
-  <link rel="icon" type="image/png" href="../favicon.png">
+  <link rel="icon" type="image/png" href="../favicon.png?v=2">
 
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -22,34 +22,37 @@
     }
 
     html { 
-      /* This is the key to stopping the "jump" when moving between pages */
+      /* Essential: Forces the browser to keep the scrollbar area consistent */
       scrollbar-gutter: stable; 
     }
 
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: var(--bg-dark); }
-    ::-webkit-scrollbar-thumb { background: #222; border-radius: 10px; }
-
     body { 
-      background-color: var(--bg-dark); color: var(--text); 
-      font-family: 'Montserrat', sans-serif; line-height: 1.6;
-      overflow-x: hidden; scroll-behavior: smooth;
+      background-color: var(--bg-dark); 
+      color: var(--text); 
+      font-family: 'Montserrat', sans-serif; 
+      line-height: 1.6;
+      overflow-x: hidden; 
+      scroll-behavior: smooth;
     }
 
     header { 
-      position: fixed; top: 0; left: 0; 
-      /* width: 100% works with scrollbar-gutter to keep the center absolute */
+      position: fixed; 
+      top: 0; 
+      left: 0; 
       width: 100%;
-      background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px); padding: 10px 40px; 
+      background: rgba(0, 0, 0, 0.7); 
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px); 
+      padding: 10px 40px; 
       display: grid; 
+      /* Perfect 3-column split to lock center logo */
       grid-template-columns: 1fr 1fr 1fr; 
-      align-items: center; border-bottom: 1px solid var(--border); z-index: 1000;
+      align-items: center; 
+      border-bottom: 1px solid var(--border); 
+      z-index: 1000;
     }
 
-    /* Ensure side columns don't shrink, keeping the middle column truly centered */
     .header-left, .header-socials { display: flex; width: 100%; }
-
     .header-left { justify-content: flex-start; }
     .header-socials { justify-content: flex-end; gap: 20px; }
 
@@ -74,7 +77,12 @@
       color: var(--muted); text-align: center;
     }
 
-    .gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; animation: fadeIn 0.6s ease-out; }
+    .gallery { 
+      display: grid; 
+      grid-template-columns: repeat(4, 1fr); 
+      gap: 20px; 
+      animation: fadeIn 0.6s ease-out; 
+    }
     
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
