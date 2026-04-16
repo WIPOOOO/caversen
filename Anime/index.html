@@ -18,7 +18,6 @@
       --muted: #888; 
     }
     
-    /* Smooth Cross-Fade Animation */
     @keyframes pageEnter {
       from { opacity: 0; }
       to { opacity: 1; }
@@ -106,6 +105,42 @@
     }
 
     .gallery-item img { width: 100%; display: block; }
+
+    /* LIGHTBOX STYLES */
+    .lightbox {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      backdrop-filter: blur(10px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      cursor: zoom-out;
+    }
+
+    .lightbox.active { display: flex; animation: pageEnter 0.3s ease; }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 85%;
+      border-radius: 10px;
+      box-shadow: 0 0 50px rgba(0,0,0,1);
+      cursor: default;
+    }
+
+    .close-lightbox {
+      position: absolute;
+      top: 30px;
+      right: 40px;
+      color: white;
+      font-size: 35px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .close-lightbox:hover { opacity: 0.5; }
     
     footer { 
       padding: 40px 20px; 
@@ -121,6 +156,7 @@
         header { padding: 10px 20px; }
         .logo img { height: 60px; }
         main { padding-top: 130px; }
+        .close-lightbox { top: 20px; right: 20px; }
     }
     @media (max-width: 500px) { .gallery { grid-template-columns: 1fr; } }
   </style>
@@ -143,20 +179,41 @@
   <div class="gallery" id="gallery"></div>
 </main>
 
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <span class="close-lightbox">&times;</span>
+  <img id="lightbox-img" src="" alt="Enlarged Print" onclick="event.stopPropagation()">
+</div>
+
 <footer>
   <p>© 2026 CAVERSEN PRINT — MOROCCO</p>
 </footer>
 
 <script>
-  // Dynamic Gallery Loading
   const gallery = document.getElementById('gallery');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
   const maxImages = 100; 
+
+  // Functions for Lightbox
+  function openLightbox(src) {
+    lightboxImg.src = src;
+    lightbox.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent scroll
+  }
+
+  function closeLightbox() {
+    lightbox.classList.remove('active');
+    document.body.style.overflow = 'auto'; // Restore scroll
+  }
 
   for (let i = 1; i <= maxImages; i++) {
     const fileName = `${i}.png`;
     const item = document.createElement('div');
     item.className = 'gallery-item';
     item.innerHTML = `<img src="${fileName}" alt="Print ${i}" loading="lazy">`;
+    
+    // Open lightbox on click
+    item.onclick = () => openLightbox(fileName);
     
     const imgTest = new Image();
     imgTest.src = fileName;
