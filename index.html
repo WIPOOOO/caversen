@@ -32,7 +32,6 @@
 
     .fade-out { opacity: 0; }
 
-    /* Exact Header from Anime Page (without back arrow) */
     header { 
       position: fixed;
       top: 0;
@@ -60,7 +59,7 @@
 
     main { 
       flex: 1;
-      padding: 140px 40px 20px; /* Increased top padding to account for fixed header */
+      padding: 140px 40px 20px;
       max-width: 1400px; 
       margin: 0 auto; 
       width: 100%;
@@ -134,10 +133,10 @@
 <body>
 
 <header>
-  <div class="header-left"></div> <div class="logo" onclick="location.reload()">
+  <div class="header-left"></div> 
+  <a class="logo" onclick="location.reload()">
     <img src="logo.png" alt="Logo">
-  </div>
-  
+  </a>
   <div class="header-socials">
     <a href="https://www.instagram.com/caversen.maroc/" target="_blank"><i class="fab fa-instagram"></i></a>
     <a href="https://wa.me/212700256668" target="_blank"><i class="fab fa-whatsapp"></i></a>
@@ -161,7 +160,6 @@
 <footer><p>© 2026 CAVERSEN PRINT — MOROCCO</p></footer>
 
 <script>
-  // Smooth transition for clicking collections
   document.querySelectorAll('.card').forEach(link => {
     link.addEventListener('click', e => {
       e.preventDefault();
