@@ -19,24 +19,19 @@
     }
     
     html {
-      /* This ensures the logo stays aligned with the sub-pages */
       scrollbar-gutter: stable;
     }
 
     body { 
       height: 100vh;
       width: 100%;
-      /* Keeps the main page from scrolling */
       overflow: hidden; 
       background-color: var(--bg-dark);
       color: var(--text); 
       font-family: 'Montserrat', sans-serif; 
       display: flex;
       flex-direction: column;
-      transition: opacity 0.5s ease;
     }
-
-    .fade-out { opacity: 0; }
 
     header { 
       position: fixed;
@@ -90,7 +85,8 @@
       -webkit-backdrop-filter: blur(15px); aspect-ratio: 1.15 / 1; 
       display: flex; justify-content: center; align-items: center;
       text-decoration: none; color: var(--text); 
-      transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+      /* Kept hover transition as it feels premium, but removed page transition */
+      transition: all 0.3s ease;
     }
 
     .card:hover { 
@@ -145,15 +141,5 @@
 
 <footer><p>© 2026 CAVERSEN PRINT — MOROCCO</p></footer>
 
-<script>
-  document.querySelectorAll('.card').forEach(link => {
-    link.addEventListener('click', e => {
-      e.preventDefault();
-      const target = link.href;
-      document.body.classList.add('fade-out');
-      setTimeout(() => window.location.href = target, 500);
-    });
-  });
-</script>
 </body>
 </html>
